@@ -1,0 +1,19 @@
+language: rust
+rust:
+    - stable
+os:
+    - linux
+    - osx
+branches:
+  only:
+  - master
+install:
+    - |
+        if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+           brew install sdl2 sdl2_gfx sdl2_mixer sdl2_image sdl2_ttf
+        else
+            sudo apt update
+            sudo apt install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev libsdl2-ttf-dev
+        fi
+script:
+    - cargo test
