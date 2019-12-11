@@ -1,5 +1,5 @@
 [package]
-name = "chippy"
+name = "crust"
 description = "A Chip-8 emulator in Rust"
 version = "0.1.0"
 authors = ["Pierre Wacrenier <pierre@wacrenier.me>"]
