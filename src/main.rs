@@ -3,11 +3,13 @@ extern crate hexdump;
 mod cpu;
 mod rom;
 mod font;
+mod display;
 
 use hexdump::hexdump;
 use clap::{Arg, App};
 
 use cpu::CPU;
+use display::Display;
 use rom::*;
 
 const MEMORY_SIZE: usize = 0x1000;
@@ -28,5 +30,14 @@ pub fn main() {
     let rom = load_rom(rom_path).unwrap();
     let cpu = CPU::init(&rom);
 
-    hexdump(&cpu.get_ram())
+    let mut display = Display::new();
+
+    'running: loop {
+        if display.has_to_quit() {
+            break 'running
+        }
+
+        display.clear_screen();
+        display.render();
+    }
 }
