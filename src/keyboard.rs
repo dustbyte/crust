@@ -9,24 +9,64 @@ pub struct Keyboard {
     event_pump: sdl2::EventPump,
 }
 
-const Key0: u16 = (0x01 << 0x00);
-const Key1: u16 = (0x01 << 0x01);
-const Key2: u16 = (0x01 << 0x02);
-const Key3: u16 = (0x01 << 0x03);
-const Key4: u16 = (0x01 << 0x04);
-const Key5: u16 = (0x01 << 0x05);
-const Key6: u16 = (0x01 << 0x06);
-const Key7: u16 = (0x01 << 0x07);
-const Key8: u16 = (0x01 << 0x08);
-const Key9: u16 = (0x01 << 0x09);
-const KeyA: u16 = (0x01 << 0x0A);
-const KeyB: u16 = (0x01 << 0x0B);
-const KeyC: u16 = (0x01 << 0x0C);
-const KeyD: u16 = (0x01 << 0x0D);
-const KeyE: u16 = (0x01 << 0x0E);
-const KeyF: u16 = (0x01 << 0x0F);
+//pub const Key0: u16 = (0x01 << 0x00);
+//pub const Key1: u16 = (0x01 << 0x01);
+//pub const Key2: u16 = (0x01 << 0x02);
+//pub const Key3: u16 = (0x01 << 0x03);
+//pub const Key4: u16 = (0x01 << 0x04);
+//pub const Key5: u16 = (0x01 << 0x05);
+//pub const Key6: u16 = (0x01 << 0x06);
+//pub const Key7: u16 = (0x01 << 0x07);
+//pub const Key8: u16 = (0x01 << 0x08);
+//pub const Key9: u16 = (0x01 << 0x09);
+//pub const KeyA: u16 = (0x01 << 0x0A);
+//pub const KeyB: u16 = (0x01 << 0x0B);
+//pub const KeyC: u16 = (0x01 << 0x0C);
+//pub const KeyD: u16 = (0x01 << 0x0D);
+//pub const KeyE: u16 = (0x01 << 0x0E);
+//pub const KeyF: u16 = (0x01 << 0x0F);
 
-pub type State = u16;
+#[repr(u16)]
+pub enum KeyPad {
+    Key0 = (0x01 << 0x00),
+    Key1 = (0x01 << 0x01),
+    Key2 = (0x01 << 0x02),
+    Key3 = (0x01 << 0x03),
+    Key4 = (0x01 << 0x04),
+    Key5 = (0x01 << 0x05),
+    Key6 = (0x01 << 0x06),
+    Key7 = (0x01 << 0x07),
+    Key8 = (0x01 << 0x08),
+    Key9 = (0x01 << 0x09),
+    KeyA = (0x01 << 0x0A),
+    KeyB = (0x01 << 0x0B),
+    KeyC = (0x01 << 0x0C),
+    KeyD = (0x01 << 0x0D),
+    KeyE = (0x01 << 0x0E),
+    KeyF = (0x01 << 0x0F),
+}
+
+pub struct State {
+    state: u16,
+}
+
+impl State {
+    pub fn new() -> Self {
+        State { state: 0 }
+    }
+
+    pub fn add_key(&mut self, key: KeyPad) {
+        self.state |= key as u16
+    }
+
+    pub fn has_key(&self, key: KeyPad) -> bool {
+        self.state & key as u16 != 0
+    }
+
+    pub fn as_raw(&self) -> u16 {
+        self.state
+    }
+}
 
 impl Keyboard {
     pub fn new(display: &Display) -> Keyboard {
@@ -36,29 +76,29 @@ impl Keyboard {
     }
 
     pub fn poll(&mut self) -> Result<State, ()> {
-        let mut state: State = 0;
+        let mut state = State::new();
 
         for event in self.event_pump.poll_iter() {
             match event {
                 Event::Quit { .. } => return Err(()),
                 Event::KeyDown { keycode, .. } => {
                     match keycode.unwrap() {
-                        Keycode::Num1 => state |= Key1,
-                        Keycode::Num2 => state |= Key2,
-                        Keycode::Num3 => state |= Key3,
-                        Keycode::Num4 => state |= KeyC,
-                        Keycode::Q => state |= Key4,
-                        Keycode::W => state |= Key5,
-                        Keycode::E => state |= Key6,
-                        Keycode::R => state |= KeyD,
-                        Keycode::A => state |= Key7,
-                        Keycode::S => state |= Key8,
-                        Keycode::D => state |= Key9,
-                        Keycode::F => state |= KeyE,
-                        Keycode::Z => state |= KeyA,
-                        Keycode::X => state |= Key0,
-                        Keycode::C => state |= KeyB,
-                        Keycode::V => state |= KeyF,
+                        Keycode::Num1 => state.add_key(KeyPad::Key1),
+                        Keycode::Num2 => state.add_key(KeyPad::Key2),
+                        Keycode::Num3 => state.add_key(KeyPad::Key3),
+                        Keycode::Num4 => state.add_key(KeyPad::KeyC),
+                        Keycode::Q => state.add_key(KeyPad::Key4),
+                        Keycode::W => state.add_key(KeyPad::Key5),
+                        Keycode::E => state.add_key(KeyPad::Key6),
+                        Keycode::R => state.add_key(KeyPad::KeyD),
+                        Keycode::A => state.add_key(KeyPad::Key7),
+                        Keycode::S => state.add_key(KeyPad::Key8),
+                        Keycode::D => state.add_key(KeyPad::Key9),
+                        Keycode::F => state.add_key(KeyPad::KeyE),
+                        Keycode::Z => state.add_key(KeyPad::KeyA),
+                        Keycode::X => state.add_key(KeyPad::Key0),
+                        Keycode::C => state.add_key(KeyPad::KeyB),
+                        Keycode::V => state.add_key(KeyPad::KeyF),
                         Keycode::Escape => return Err(()),
                         _ => ()
                     }
