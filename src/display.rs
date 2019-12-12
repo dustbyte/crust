@@ -7,7 +7,6 @@ use sdl2::keyboard::Keycode;
 pub struct Display {
     ctx: sdl2::Sdl,
     canvas: sdl2::render::WindowCanvas,
-    event_pump: sdl2::EventPump,
 }
 
 impl Display {
@@ -18,7 +17,6 @@ impl Display {
             .position_centered()
             .build()
             .unwrap();
-        let event_pump = ctx.event_pump().unwrap();
 
         let canvas = window.into_canvas()
             .build()
@@ -27,7 +25,6 @@ impl Display {
         Display {
             ctx: ctx,
             canvas: canvas,
-            event_pump: event_pump,
         }
     }
 
@@ -44,14 +41,7 @@ impl Display {
         self.canvas.present()
     }
 
-    pub fn has_to_quit(&mut self) -> bool {
-        for event in self.event_pump.poll_iter() {
-            match event {
-                Event::Quit {..} => return true,
-                _ => ()
-            }
-        }
-
-        false
+    pub fn get_context(&self) -> &sdl2::Sdl {
+        &self.ctx
     }
 }
