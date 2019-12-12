@@ -8,7 +8,6 @@ mod keyboard;
 
 use std::{thread, time};
 
-use hexdump::hexdump;
 use clap::{Arg, App};
 
 use cpu::CPU;

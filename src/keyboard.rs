@@ -9,23 +9,6 @@ pub struct Keyboard {
     event_pump: sdl2::EventPump,
 }
 
-//pub const Key0: u16 = (0x01 << 0x00);
-//pub const Key1: u16 = (0x01 << 0x01);
-//pub const Key2: u16 = (0x01 << 0x02);
-//pub const Key3: u16 = (0x01 << 0x03);
-//pub const Key4: u16 = (0x01 << 0x04);
-//pub const Key5: u16 = (0x01 << 0x05);
-//pub const Key6: u16 = (0x01 << 0x06);
-//pub const Key7: u16 = (0x01 << 0x07);
-//pub const Key8: u16 = (0x01 << 0x08);
-//pub const Key9: u16 = (0x01 << 0x09);
-//pub const KeyA: u16 = (0x01 << 0x0A);
-//pub const KeyB: u16 = (0x01 << 0x0B);
-//pub const KeyC: u16 = (0x01 << 0x0C);
-//pub const KeyD: u16 = (0x01 << 0x0D);
-//pub const KeyE: u16 = (0x01 << 0x0E);
-//pub const KeyF: u16 = (0x01 << 0x0F);
-
 #[repr(u16)]
 pub enum KeyPad {
     Key0 = (0x01 << 0x00),
