@@ -16,8 +16,8 @@ pub struct CPU {
 }
 
 impl CPU {
-    pub fn new() -> CPU {
-        CPU {
+    pub fn new() -> Self {
+        Self {
             i: 0,
             pc: 0,
             sp: 0,

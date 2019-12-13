@@ -40,16 +40,17 @@ pub fn main() {
     let mut context = Context::new();
     let mut display = Display::new(&context);
     let mut keyboard = Keyboard::new(&context);
+    let mut renderer = Renderer::new(&mut display, &cpu);
 
+    renderer.reset();
     while let Ok(state) = keyboard.poll() {
-        // tmp 500hz
-        thread::sleep(time::Duration::from_millis(2));
-
         if state.has_key(KeyPad::Key0) {
             println!("Key0 pressed!")
         }
 
-        display.clear_screen();
-        display.draw();
+        renderer.render();
+
+        // tmp 500hz
+        thread::sleep(time::Duration::from_millis(2));
     }
 }

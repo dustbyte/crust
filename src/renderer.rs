@@ -7,11 +7,15 @@ pub struct Renderer<'a> {
 }
 
 impl<'a> Renderer<'a> {
-    fn new(display: &'a mut Display, cpu: &'a CPU) -> Self {
+    pub fn new(display: &'a mut Display, cpu: &'a CPU) -> Self {
         Renderer { display: display, cpu: cpu }
     }
 
-    fn render(&mut self) {
+    pub fn reset(&mut self) {
+        self.display.clear_screen();
+    }
 
+    pub fn render(&mut self) {
+        self.display.draw()
     }
 }

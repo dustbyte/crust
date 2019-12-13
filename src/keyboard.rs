@@ -35,7 +35,7 @@ pub struct State {
 
 impl State {
     pub fn new() -> Self {
-        State { state: 0 }
+        Self { state: 0 }
     }
 
     pub fn add_key(&mut self, key: KeyPad) {
@@ -52,8 +52,8 @@ impl State {
 }
 
 impl Keyboard {
-    pub fn new(context: &Context) -> Keyboard {
-        Keyboard {
+    pub fn new(context: &Context) -> Self {
+        Self {
             event_pump: context.as_raw().event_pump().unwrap(),
         }
     }
