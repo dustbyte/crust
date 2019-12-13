@@ -3,7 +3,7 @@ extern crate sdl2;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 
-use crate::display::Display;
+use crate::context::Context;
 
 pub struct Keyboard {
     event_pump: sdl2::EventPump,
@@ -52,9 +52,9 @@ impl State {
 }
 
 impl Keyboard {
-    pub fn new(display: &Display) -> Keyboard {
+    pub fn new(context: &Context) -> Keyboard {
         Keyboard {
-            event_pump: display.get_context().event_pump().unwrap(),
+            event_pump: context.as_raw().event_pump().unwrap(),
         }
     }
 

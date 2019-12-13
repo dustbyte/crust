@@ -3,17 +3,21 @@ extern crate hexdump;
 mod cpu;
 mod rom;
 mod font;
+mod context;
 mod display;
 mod keyboard;
+mod renderer;
 
 use std::{thread, time};
 
 use clap::{Arg, App};
 
 use cpu::CPU;
+use rom::*;
+use context::Context;
 use display::Display;
 use keyboard::*;
-use rom::*;
+use renderer::Renderer;
 
 const MEMORY_SIZE: usize = 0x1000;
 const ROM_SIZE: usize = MEMORY_SIZE - 0x200;
@@ -33,8 +37,9 @@ pub fn main() {
     let rom = load_rom(rom_path).unwrap();
     let cpu = CPU::init(&rom);
 
-    let mut display = Display::new();
-    let mut keyboard = Keyboard::new(&display);
+    let mut context = Context::new();
+    let mut display = Display::new(&context);
+    let mut keyboard = Keyboard::new(&context);
 
     while let Ok(state) = keyboard.poll() {
         // tmp 500hz
@@ -45,6 +50,6 @@ pub fn main() {
         }
 
         display.clear_screen();
-        display.render();
+        display.draw();
     }
 }
