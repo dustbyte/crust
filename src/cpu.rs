@@ -1,4 +1,6 @@
 use crate::MEMORY_SIZE;
+use crate::WIDTH;
+use crate::HEIGHT;
 use crate::rom::RomBuffer;
 use crate::font::FONT;
 
@@ -13,6 +15,7 @@ pub struct CPU {
 
     stack: [u16; 0xf],
     ram: [u8; MEMORY_SIZE],
+    vram: [[u8; WIDTH]; HEIGHT],
 }
 
 impl CPU {
@@ -25,7 +28,8 @@ impl CPU {
             delay: 0,
             sound: 0,
             stack: [0; 0xf],
-            ram: [0; MEMORY_SIZE]
+            ram: [0; MEMORY_SIZE],
+            vram: [[0; WIDTH]; HEIGHT],
         }
     }
 
@@ -53,5 +57,9 @@ impl CPU {
 
     pub fn get_ram(&self) -> &[u8] {
         &self.ram
+    }
+
+    pub fn get_vram(&self) -> &[[u8; WIDTH]; HEIGHT] {
+        &self.vram
     }
 }
