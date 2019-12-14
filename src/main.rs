@@ -8,6 +8,7 @@ mod display;
 mod buzzer;
 mod keyboard;
 mod renderer;
+mod tools;
 
 use std::{thread, time};
 
@@ -20,6 +21,7 @@ use display::Display;
 use buzzer::Buzzer;
 use keyboard::*;
 use renderer::Renderer;
+use tools::*;
 
 const MEMORY_SIZE: usize = 0x1000;
 const ROM_SIZE: usize = MEMORY_SIZE - 0x200;
@@ -28,42 +30,6 @@ const HEIGHT: usize = 32;
 const UPSCALE: usize= 10;
 const CPU_FREQUENCY: &'static str = "500";
 const IO_FREQUENCY: &'static str = "60";
-
-struct Counter {
-    slice: u64,
-    counter: time::Instant,
-}
-
-impl Counter {
-    pub fn new(frequency: u64) -> Self {
-        Self {
-            slice: time::Duration::from_millis(1000 / frequency).as_millis() as u64,
-            counter: time::Instant::now(),
-        }
-    }
-
-    pub fn from_str(frequency: &str) -> Self {
-        let int_value = frequency.to_string().parse::<u64>().unwrap();
-
-        Self::new(int_value)
-    }
-
-    pub fn burnt_duration(&self) -> i128 {
-        self.slice as i128 - self.counter.elapsed().as_millis() as i128
-    }
-
-    pub fn is_burnt(&self) -> bool {
-        self.burnt_duration() <= 0
-    }
-
-    pub fn reset(&mut self) {
-        self.counter = time::Instant::now()
-    }
-
-    pub fn duration(&self) -> time::Duration {
-        self.counter.elapsed()
-    }
-}
 
 pub fn main() {
     let matches = App::new(env!("CARGO_PKG_NAME"))
@@ -88,8 +54,8 @@ pub fn main() {
             )
         .get_matches();
 
-    let mut cpu_counter = Counter::from_str(matches.value_of("cpu_freq").unwrap_or(CPU_FREQUENCY));
-    let mut io_counter = Counter::from_str(matches.value_of("io_freq").unwrap_or(IO_FREQUENCY));
+    let mut cpu_counter = FrequencyTracker::from_str(matches.value_of("cpu_freq").unwrap_or(CPU_FREQUENCY));
+    let mut io_counter = FrequencyTracker::from_str(matches.value_of("io_freq").unwrap_or(IO_FREQUENCY));
 
     let rom_path = matches.value_of("ROM").unwrap();
     let rom = load_rom(rom_path).unwrap();
