@@ -40,22 +40,19 @@ pub fn main() {
 
     let rom_path = matches.value_of("ROM").unwrap();
     let rom = load_rom(rom_path).unwrap();
-    let cpu = CPU::init(&rom);
+    let mut cpu = CPU::init(&rom);
 
     let context = Context::new();
     let mut display = Display::new(&context);
     let mut buzzer = Buzzer::new(&context);
     let mut keyboard = Keyboard::new(&context);
-    let mut renderer = Renderer::new(&mut display, &cpu);
+    let mut renderer = Renderer::new(&mut display);
 
     renderer.reset();
     while let Ok(state) = keyboard.poll() {
-        if state.has_key(KeyPad::Key0) {
-            println!("Key0 pressed!")
-        }
+        cpu.tick(&state);
 
-        renderer.render();
-
+        renderer.render(cpu.get_vram());
         if cpu.beeping() {
             buzzer.play()
         } else {

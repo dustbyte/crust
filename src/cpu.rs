@@ -3,6 +3,9 @@ use crate::WIDTH;
 use crate::HEIGHT;
 use crate::rom::RomBuffer;
 use crate::font::FONT;
+use crate::keyboard::{State, KeyPad};
+
+pub type VRAM = [[u8; WIDTH]; HEIGHT];
 
 pub struct CPU {
     i: u16,
@@ -15,7 +18,7 @@ pub struct CPU {
 
     stack: [u16; 0xf],
     ram: [u8; MEMORY_SIZE],
-    vram: [[u8; WIDTH]; HEIGHT],
+    vram: VRAM,
 }
 
 impl CPU {
@@ -59,11 +62,15 @@ impl CPU {
         &self.ram
     }
 
-    pub fn get_vram(&self) -> &[[u8; WIDTH]; HEIGHT] {
+    pub fn get_vram(&self) -> &VRAM {
         &self.vram
     }
 
     pub fn beeping(&self) -> bool {
         self.st > 0
+    }
+
+    pub fn tick(&mut self, input: &State) {
+
     }
 }

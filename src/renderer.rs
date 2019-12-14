@@ -1,14 +1,13 @@
 use crate::display::{Display, DisplayColor};
-use crate::cpu::CPU;
+use crate::cpu::VRAM;
 
 pub struct Renderer<'a> {
     display: &'a mut Display,
-    cpu: &'a CPU,
 }
 
 impl<'a> Renderer<'a> {
-    pub fn new(display: &'a mut Display, cpu: &'a CPU) -> Self {
-        Renderer { display: display, cpu: cpu }
+    pub fn new(display: &'a mut Display) -> Self {
+        Renderer { display: display}
     }
 
     pub fn reset(&mut self) {
@@ -23,8 +22,8 @@ impl<'a> Renderer<'a> {
         }
     }
 
-    pub fn render(&mut self) {
-        for (j, &line) in self.cpu.get_vram().iter().enumerate() {
+    pub fn render(&mut self, vram: &VRAM) {
+        for (j, &line) in vram.iter().enumerate() {
             for (i, &pixel) in line.iter().enumerate() {
                 self.display.draw_pixel(i as i32, j as i32, Self::get_color(pixel))
             }
