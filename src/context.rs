@@ -13,13 +13,3 @@ impl Context {
         &self.ctx
     }
 }
-
-#[cfg(test)]
-mod context_test {
-    use super::*;
-
-    #[test]
-    fn return_raw_context() {
-        let ctx: &sdl2::Sdl = Context::new().as_raw();
-    }
-}
