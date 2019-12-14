@@ -5,6 +5,8 @@ use crate::rom::RomBuffer;
 use crate::font::FONT;
 use crate::keyboard::{State, KeyPad};
 
+const INSTRUCTION_LENGTH: u16 = 2;
+
 pub type VRAM = [[u8; WIDTH]; HEIGHT];
 
 pub struct CPU {
@@ -71,6 +73,11 @@ impl CPU {
     }
 
     pub fn tick(&mut self, input: &State) {
+        let instruction = self.fetch_instruction();
+        self.pc += INSTRUCTION_LENGTH;
+    }
 
+    fn fetch_instruction(&self) -> u16 {
+        ((self.ram[self.pc as usize] as u16) << 8) | (self.ram[self.pc as usize + 1]) as u16
     }
 }
