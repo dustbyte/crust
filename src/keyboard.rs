@@ -46,6 +46,7 @@ impl State {
         self.state & key as u16 != 0
     }
 
+    #[allow(dead_code)]
     pub fn as_raw(&self) -> u16 {
         self.state
     }

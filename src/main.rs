@@ -40,7 +40,7 @@ pub fn main() {
     let rom = load_rom(rom_path).unwrap();
     let cpu = CPU::init(&rom);
 
-    let mut context = Context::new();
+    let context = Context::new();
     let mut display = Display::new(&context);
     let mut keyboard = Keyboard::new(&context);
     let mut renderer = Renderer::new(&mut display, &cpu);
