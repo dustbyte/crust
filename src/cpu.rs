@@ -10,8 +10,8 @@ pub struct CPU {
     sp: u8,
     v: [u8; 0xf],
 
-    delay: u8,
-    sound: u8,
+    dt: u8,
+    st: u8,
 
     stack: [u16; 0xf],
     ram: [u8; MEMORY_SIZE],
@@ -25,8 +25,8 @@ impl CPU {
             pc: 0,
             sp: 0,
             v: [0; 0xf],
-            delay: 0,
-            sound: 0,
+            dt: 0,
+            st: 0,
             stack: [0; 0xf],
             ram: [0; MEMORY_SIZE],
             vram: [[0; WIDTH]; HEIGHT],
@@ -61,5 +61,9 @@ impl CPU {
 
     pub fn get_vram(&self) -> &[[u8; WIDTH]; HEIGHT] {
         &self.vram
+    }
+
+    pub fn beeping(&self) -> bool {
+        self.st > 0
     }
 }

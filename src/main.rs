@@ -5,6 +5,7 @@ mod rom;
 mod font;
 mod context;
 mod display;
+mod buzzer;
 mod keyboard;
 mod renderer;
 
@@ -16,6 +17,7 @@ use cpu::CPU;
 use rom::*;
 use context::Context;
 use display::Display;
+use buzzer::Buzzer;
 use keyboard::*;
 use renderer::Renderer;
 
@@ -42,6 +44,7 @@ pub fn main() {
 
     let context = Context::new();
     let mut display = Display::new(&context);
+    let mut buzzer = Buzzer::new(&context);
     let mut keyboard = Keyboard::new(&context);
     let mut renderer = Renderer::new(&mut display, &cpu);
 
@@ -52,6 +55,12 @@ pub fn main() {
         }
 
         renderer.render();
+
+        if cpu.beeping() {
+            buzzer.play()
+        } else {
+            buzzer.pause()
+        }
 
         // tmp 500hz
         thread::sleep(time::Duration::from_millis(2));
