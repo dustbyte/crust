@@ -61,18 +61,21 @@ fn run(matches: &ArgMatches) -> Result<(), String> {
     renderer.reset();
     while let Ok(state) = keyboard.poll() {
         if io_counter.is_burnt() {
+            cpu.decrement_delay();
             renderer.render(cpu.get_vram());
+
             if cpu.beeping() {
                 buzzer.play()
             } else {
                 buzzer.pause()
             }
+
             io_counter.reset()
         }
 
         if cpu_counter.is_burnt() {
             cpu.tick(&state);
-            cpu_counter.reset()
+            cpu_counter.reset();
         } else {
             // This can be safely assume for a 500hz CPU block and 60HZ display refresh rate.
             thread::sleep(time::Duration::from_millis(cpu_counter.burnt_duration() as u64));

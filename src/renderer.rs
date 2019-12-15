@@ -14,8 +14,8 @@ impl<'a> Renderer<'a> {
         self.display.clear_screen();
     }
 
-    fn get_color(pixel: u8) -> DisplayColor {
-        if pixel == 0 {
+    fn get_color(pixel: bool) -> DisplayColor {
+        if pixel {
             DisplayColor::Black
         } else {
             DisplayColor::White
