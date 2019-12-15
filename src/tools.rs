@@ -13,10 +13,12 @@ impl FrequencyTracker {
         }
     }
 
-    pub fn from_str(frequency: &str) -> Self {
-        let int_value = frequency.to_string().parse::<u64>().unwrap();
-
-        Self::new(int_value)
+    pub fn from_str(frequency: &str) -> Result<Self, String> {
+        if let Ok(value) = frequency.to_string().parse::<u64>() {
+            Ok(Self::new(value))
+        } else {
+            Err(format!("Couldn't parse value '{}' as a frequency.", frequency))
+        }
     }
 
     pub fn burnt_duration(&self) -> i128 {
@@ -56,13 +58,15 @@ mod frequency_tracker_test {
 
     #[test]
     fn new_ft_from_str_test() {
-        let ft = FrequencyTracker::from_str("500");
-
+        let ft = FrequencyTracker::from_str("500").unwrap();
         assert_eq!(ft.slice, 2);
 
-        let ft = FrequencyTracker::from_str("60");
-
+        let ft = FrequencyTracker::from_str("60").unwrap();
         assert_eq!(ft.slice, 16);
+
+        let ft = FrequencyTracker::from_str("a");
+        assert!(ft.is_err());
+
     }
 
     #[test]
