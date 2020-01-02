@@ -20,6 +20,8 @@ def main():
         content = handle.read()
 
         for i in range(0, len(content), 2):
+            if i + 1 >= len(content):
+                break
             instruction = content[i] << 8 | content[i + 1]
             nibbles = (
                 (instruction & 0xF000) >> 12,
@@ -34,7 +36,7 @@ def main():
             x = nibbles[1]
             y = nibbles[2]
             n = nibbles[3]
-            output = "{:x}: {:x}: ".format(0x200 + i, instruction)
+            output = "{:04x}: {:04x}: ".format(0x200 + i, instruction)
 
             if fam == 0:
                 if nnn == 0x0E0:

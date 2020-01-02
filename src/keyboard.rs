@@ -42,9 +42,8 @@ impl State {
         self.state |= key as u16
     }
 
-    #[allow(dead_code)]
-    pub fn has_key(&self, key: KeyPad) -> bool {
-        self.state & key as u16 != 0
+    pub fn has_key(&self, keypos: u8) -> bool {
+        (self.state & (1 << keypos)) != 0
     }
 
     pub fn as_raw(&self) -> u16 {
@@ -92,5 +91,23 @@ impl Keyboard {
         }
 
         return Ok(state)
+    }
+}
+
+#[cfg(test)]
+mod keyboard_test {
+    use super::*;
+
+    #[test]
+    fn test_has_key() {
+        let mut state = State::new();
+
+        state.add_key(KeyPad::Key0);
+        assert!(state.has_key(0));
+
+        state.add_key(KeyPad::KeyA);
+        assert!(state.has_key(0xa));
+
+        assert!(!state.has_key(0x9));
     }
 }

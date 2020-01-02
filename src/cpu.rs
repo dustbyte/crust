@@ -80,7 +80,6 @@ impl CPU {
 
     pub fn tick(&mut self, input: &State) {
         let instruction = self.fetch_instruction();
-        self.print_state(instruction);
 
         let nibbles = (
             (instruction & 0xF000) >> 12,
@@ -105,8 +104,8 @@ impl CPU {
             }
             // RET
             (0x0, 0x0, 0xE, 0xE) => {
-                self.pc = self.stack[self.sp];
                 self.sp -= 1;
+                self.pc = self.stack[self.sp];
             },
             // JP addr
             (0x1, _, _ ,_) => {
@@ -114,8 +113,8 @@ impl CPU {
             },
             // CALL addr
             (0x2, _, _, _) => {
+                self.stack[self.sp] = self.pc;
                 self.sp += 1;
-                self.stack[self.sp] = self.pc - INSTRUCTION_LENGTH;
                 self.pc = nnn;
             },
             // SE Vx, byte
@@ -142,7 +141,10 @@ impl CPU {
             },
             // ADD Vx, byte
             (0x7, _, _, _) => {
-                self.v[x] += kk;
+                let vx = self.v[x] as u16;
+                let val = kk as u16;
+                let result = vx + val;
+                self.v[x] = (result & 0xff) as u8;
             },
             // LD Vx, Vy
             (0x8, _, _, 0x0) => {
@@ -238,13 +240,13 @@ impl CPU {
             },
             // SKP Vx
             (0xE, _, 0x9, 0xE) => {
-                if (input.as_raw() << x >> 7) !=0 {
+                if input.has_key(self.v[x]) {
                     self.pc += INSTRUCTION_LENGTH;
                 }
             },
             // SKNP Vx
             (0xE, _, 0xA, 0x1) => {
-                if (input.as_raw() << x >> 7) == 0 {
+                if !input.has_key(self.v[x]) {
                     self.pc += INSTRUCTION_LENGTH;
                 }
             },
@@ -285,17 +287,17 @@ impl CPU {
             (0xF, _, 0x3, 0x3) => {
                 self.ram[self.i] = self.v[x] / 100;
                 self.ram[self.i + 1] = (self.v[x] % 100) / 10;
-                self.ram[self.i + 2] = (self.v[x] % 100) % 10;
+                self.ram[self.i + 2] = self.v[x] % 10;
             },
             // LD [I], Vx
             (0xF, _, 0x5, 0x5) => {
-                for idx in 0x0..x {
+                for idx in 0x0..x+1 {
                     self.ram[self.i + idx] = self.v[idx];
                 }
             },
             // LD Vx, [I]
             (0xF, _, 0x6, 0x5) => {
-                for idx in 0x0..x {
+                for idx in 0x0..x+1 {
                     self.v[x] = self.ram[self.i + idx];
                 }
             },
@@ -303,14 +305,24 @@ impl CPU {
                 println!("Unknown instruction 0x{:x}", instruction);
             }
         }
+
+        self.print_state(instruction);
     }
 
+    #[allow(dead_code)]
     fn print_state(&self, instruction: u16) {
         println!("Instruction: 0x{:x}", instruction);
         for x in 0..0x10 {
             print!("V{:X} = 0x{:x}\n", x, self.v[x]);
         }
-        println!("i = 0x{:x}\npc = 0x{:x}\nsp = 0x{:x}\ndt = 0x{:x}\nst = 0x{:x}\n", self.i, self.pc, self.sp, self.dt, self.st);
+        println!("i = 0x{:04x}\npc = 0x{:04x}\nsp = 0x{:x}\ndt = 0x{:x}\nst = 0x{:x}\n", self.i, self.pc, self.sp, self.dt, self.st);
+    }
+
+    #[allow(dead_code)]
+    fn print_memory(&self, from: usize, length: usize) {
+        for x in from..from+length {
+            println!("{:04x}: {:02x}", x, self.ram[x]);
+        }
     }
 
     fn fetch_instruction(&self) -> u16 {
