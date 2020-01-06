@@ -298,7 +298,7 @@ impl CPU {
             // LD Vx, [I]
             (0xF, _, 0x6, 0x5) => {
                 for idx in 0x0..x+1 {
-                    self.v[x] = self.ram[self.i + idx];
+                    self.v[idx] = self.ram[self.i + idx];
                 }
             },
             (_, _, _, _) => {
