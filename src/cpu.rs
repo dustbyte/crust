@@ -305,8 +305,6 @@ impl CPU {
                 println!("Unknown instruction 0x{:x}", instruction);
             }
         }
-
-        self.print_state(instruction);
     }
 
     #[allow(dead_code)]

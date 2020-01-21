@@ -64,33 +64,44 @@ impl Keyboard {
         for event in self.event_pump.poll_iter() {
             match event {
                 Event::Quit { .. } => return Err(()),
-                Event::KeyDown { keycode, .. } => {
-                    match keycode.unwrap() {
-                        Keycode::Num1 => state.add_key(KeyPad::Key1),
-                        Keycode::Num2 => state.add_key(KeyPad::Key2),
-                        Keycode::Num3 => state.add_key(KeyPad::Key3),
-                        Keycode::Num4 => state.add_key(KeyPad::KeyC),
-                        Keycode::Q => state.add_key(KeyPad::Key4),
-                        Keycode::W => state.add_key(KeyPad::Key5),
-                        Keycode::E => state.add_key(KeyPad::Key6),
-                        Keycode::R => state.add_key(KeyPad::KeyD),
-                        Keycode::A => state.add_key(KeyPad::Key7),
-                        Keycode::S => state.add_key(KeyPad::Key8),
-                        Keycode::D => state.add_key(KeyPad::Key9),
-                        Keycode::F => state.add_key(KeyPad::KeyE),
-                        Keycode::Z => state.add_key(KeyPad::KeyA),
-                        Keycode::X => state.add_key(KeyPad::Key0),
-                        Keycode::C => state.add_key(KeyPad::KeyB),
-                        Keycode::V => state.add_key(KeyPad::KeyF),
-                        Keycode::Escape => return Err(()),
-                        _ => ()
-                    }
-                }
+                Event::KeyDown { keycode, .. } => match keycode.unwrap() {
+                    Keycode::Escape => return Err(()),
+                    _ => (),
+                },
                 _ => (),
             }
         }
 
-        return Ok(state)
+        let keys: Vec<Keycode> = self
+            .event_pump
+            .keyboard_state()
+            .pressed_scancodes()
+            .filter_map(Keycode::from_scancode)
+            .collect();
+
+        for key in keys {
+            match key {
+                Keycode::Num1 => state.add_key(KeyPad::Key1),
+                Keycode::Num2 => state.add_key(KeyPad::Key2),
+                Keycode::Num3 => state.add_key(KeyPad::Key3),
+                Keycode::Num4 => state.add_key(KeyPad::KeyC),
+                Keycode::Q => state.add_key(KeyPad::Key4),
+                Keycode::W => state.add_key(KeyPad::Key5),
+                Keycode::E => state.add_key(KeyPad::Key6),
+                Keycode::R => state.add_key(KeyPad::KeyD),
+                Keycode::A => state.add_key(KeyPad::Key7),
+                Keycode::S => state.add_key(KeyPad::Key8),
+                Keycode::D => state.add_key(KeyPad::Key9),
+                Keycode::F => state.add_key(KeyPad::KeyE),
+                Keycode::Z => state.add_key(KeyPad::KeyA),
+                Keycode::X => state.add_key(KeyPad::Key0),
+                Keycode::C => state.add_key(KeyPad::KeyB),
+                Keycode::V => state.add_key(KeyPad::KeyF),
+                _ => (),
+            }
+        }
+
+        return Ok(state);
     }
 }
 
