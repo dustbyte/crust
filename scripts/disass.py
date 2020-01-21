@@ -114,7 +114,7 @@ def main():
 
             spaces = 30 - len(output)
             output += ' ' * spaces
-            output += "{:08b} {:08b}".format((instruction & 0xFF00) >> 8, instruction & 0x00FF).replace('1', '*').replace('0', '_')
+            output += "{:08b} {:08b}".format((instruction & 0xFF00) >> 8, instruction & 0x00FF).replace('1', '#').replace('0', '_')
 
             print(output)
 
