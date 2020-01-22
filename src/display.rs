@@ -4,7 +4,7 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 
 use crate::context::Context;
-use crate::{WIDTH, HEIGHT, UPSCALE};
+use crate::{HEIGHT, UPSCALE, WIDTH};
 
 const FACTOR: i32 = UPSCALE as i32;
 
@@ -28,29 +28,38 @@ pub struct Display {
 
 impl Display {
     pub fn new(ctx: &Context) -> Self {
-        let window = ctx.as_raw().video().unwrap()
-            .window("Crust emulator", (WIDTH * UPSCALE) as u32, (HEIGHT * UPSCALE) as u32)
+        let window = ctx
+            .as_raw()
+            .video()
+            .unwrap()
+            .window(
+                "Crust emulator",
+                (WIDTH * UPSCALE) as u32,
+                (HEIGHT * UPSCALE) as u32,
+            )
             .position_centered()
             .build()
             .unwrap();
 
-        let canvas = window.into_canvas()
-            .build()
-            .unwrap();
+        let canvas = window.into_canvas().build().unwrap();
 
-        Self {
-            canvas: canvas,
-        }
+        Self { canvas: canvas }
     }
 
     pub fn set_color(&mut self, color: DisplayColor) {
-        self.canvas.set_draw_color(DisplayColor::to_sdl_color(color))
+        self.canvas
+            .set_draw_color(DisplayColor::to_sdl_color(color))
     }
 
     pub fn draw_pixel(&mut self, x: i32, y: i32, color: DisplayColor) {
         self.set_color(color);
         self.canvas
-            .fill_rect(Rect::new(x * FACTOR, y * FACTOR, FACTOR as u32, FACTOR as u32))
+            .fill_rect(Rect::new(
+                x * FACTOR,
+                y * FACTOR,
+                FACTOR as u32,
+                FACTOR as u32,
+            ))
             .expect("Could not draw a frame");
     }
 

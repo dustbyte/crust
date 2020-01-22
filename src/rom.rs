@@ -1,8 +1,8 @@
 use crate::ROM_SIZE;
 
+use std::fs::File;
 use std::io;
 use std::io::prelude::*;
-use std::fs::File;
 
 pub type RomBuffer = [u8; ROM_SIZE];
 
@@ -17,8 +17,8 @@ pub fn load_rom(path: &str) -> io::Result<RomBuffer> {
 
 #[cfg(test)]
 mod rom_test {
-    use tempfile::NamedTempFile;
     use std::io::Write;
+    use tempfile::NamedTempFile;
 
     use super::*;
 

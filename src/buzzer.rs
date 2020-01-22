@@ -1,4 +1,4 @@
-use sdl2::audio::{AudioCallback, AudioSpecDesired, AudioDevice};
+use sdl2::audio::{AudioCallback, AudioDevice, AudioSpecDesired};
 
 use crate::context::Context;
 
@@ -34,20 +34,18 @@ impl Buzzer {
         let desired_spec = AudioSpecDesired {
             freq: Some(44100),
             channels: Some(1),
-            samples: None
+            samples: None,
         };
 
-        let device = audio_subsystem.open_playback(None, &desired_spec, |spec| {
-            SquareWave {
+        let device = audio_subsystem
+            .open_playback(None, &desired_spec, |spec| SquareWave {
                 phase_inc: 440.0 / spec.freq as f32,
                 phase: 0.0,
                 volume: 0.10,
-            }
-        }).unwrap();
+            })
+            .unwrap();
 
-        Self {
-            device: device,
-        }
+        Self { device: device }
     }
 
     pub fn play(&mut self) {

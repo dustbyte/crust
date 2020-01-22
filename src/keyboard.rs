@@ -63,8 +63,11 @@ impl Keyboard {
 
         for event in self.event_pump.poll_iter() {
             match event {
-                Event::Quit { .. } => return Err(()),
-                Event::KeyDown { keycode: Some(Keycode::Escape), .. } => return Err(()),
+                Event::Quit { .. }
+                | Event::KeyDown {
+                    keycode: Some(Keycode::Escape),
+                    ..
+                } => return Err(()),
                 _ => (),
             }
         }

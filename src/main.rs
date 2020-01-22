@@ -1,33 +1,33 @@
 extern crate clap;
 extern crate hexdump;
-mod cpu;
-mod rom;
-mod font;
-mod context;
-mod display;
 mod buzzer;
+mod context;
+mod cpu;
+mod display;
+mod font;
 mod keyboard;
 mod renderer;
+mod rom;
 mod tools;
 
 use std::{thread, time};
 
-use clap::{Arg, App, ArgMatches};
+use clap::{App, Arg, ArgMatches};
 
-use cpu::CPU;
-use rom::*;
-use context::Context;
-use display::Display;
 use buzzer::Buzzer;
+use context::Context;
+use cpu::CPU;
+use display::Display;
 use keyboard::*;
 use renderer::Renderer;
+use rom::*;
 use tools::*;
 
 const MEMORY_SIZE: usize = 0x1000;
 const ROM_SIZE: usize = MEMORY_SIZE - 0x200;
 const WIDTH: usize = 64;
 const HEIGHT: usize = 32;
-const UPSCALE: usize= 10;
+const UPSCALE: usize = 10;
 const CPU_FREQUENCY: &'static str = "500";
 const IO_FREQUENCY: &'static str = "60";
 
@@ -48,7 +48,7 @@ fn run(matches: &ArgMatches) -> Result<(), String> {
     let rom_path = matches.value_of("ROM").unwrap();
     let rom = match load_rom(rom_path) {
         Ok(rom) => rom,
-        Err(error) => return Err(error.to_string())
+        Err(error) => return Err(error.to_string()),
     };
     let mut cpu = CPU::init(&rom);
 
@@ -78,7 +78,9 @@ fn run(matches: &ArgMatches) -> Result<(), String> {
             cpu_counter.reset();
         } else {
             // This can be safely assume for a 500hz CPU block and 60HZ display refresh rate.
-            thread::sleep(time::Duration::from_millis(cpu_counter.burnt_duration() as u64));
+            thread::sleep(time::Duration::from_millis(
+                cpu_counter.burnt_duration() as u64
+            ));
         }
     }
 
@@ -90,22 +92,25 @@ pub fn main() {
         .version(env!("CARGO_PKG_VERSION"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .about(env!("CARGO_PKG_DESCRIPTION"))
-        .arg(Arg::with_name("ROM")
-            .help("path to the rom file")
-            .required(true)
-            )
-        .arg(Arg::with_name("cpu_freq")
-            .short("c")
-            .long("cpu-freq")
-            .value_name("cpu_freq")
-            .help("Set the frequency of the CPU clock in Hz")
-            )
-        .arg(Arg::with_name("io_freq")
-            .short("i")
-            .long("io-freq")
-            .value_name("io_freq")
-            .help("Set the display and buzzer refresh rate in Hz")
-            )
+        .arg(
+            Arg::with_name("ROM")
+                .help("path to the rom file")
+                .required(true),
+        )
+        .arg(
+            Arg::with_name("cpu_freq")
+                .short("c")
+                .long("cpu-freq")
+                .value_name("cpu_freq")
+                .help("Set the frequency of the CPU clock in Hz"),
+        )
+        .arg(
+            Arg::with_name("io_freq")
+                .short("i")
+                .long("io-freq")
+                .value_name("io_freq")
+                .help("Set the display and buzzer refresh rate in Hz"),
+        )
         .get_matches();
 
     if let Err(error) = run(&matches) {

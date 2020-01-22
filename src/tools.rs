@@ -17,7 +17,10 @@ impl FrequencyTracker {
         if let Ok(value) = frequency.to_string().parse::<u64>() {
             Ok(Self::new(value))
         } else {
-            Err(format!("Couldn't parse value '{}' as a frequency.", frequency))
+            Err(format!(
+                "Couldn't parse value '{}' as a frequency.",
+                frequency
+            ))
         }
     }
 
@@ -66,7 +69,6 @@ mod frequency_tracker_test {
 
         let ft = FrequencyTracker::from_str("a");
         assert!(ft.is_err());
-
     }
 
     #[test]
