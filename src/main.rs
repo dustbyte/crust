@@ -31,6 +31,15 @@ const UPSCALE: usize = 10;
 const CPU_FREQUENCY: &'static str = "500";
 const IO_FREQUENCY: &'static str = "60";
 
+fn print_keyboard() {
+    print!(
+        "[1][2][3][C]\n\
+         [4][5][6][D]\n\
+         [7][8][9][E]\n\
+         [A][0][B][F]\n",
+    )
+}
+
 fn run(matches: &ArgMatches) -> Result<(), String> {
     let cpu_freq = matches.value_of("cpu_freq").unwrap_or(CPU_FREQUENCY);
     let io_freq = matches.value_of("io_freq").unwrap_or(IO_FREQUENCY);
@@ -113,6 +122,8 @@ pub fn main() {
                 .help("Set the display and buzzer refresh rate in Hz"),
         )
         .get_matches();
+
+    print_keyboard();
 
     if let Err(error) = run(&matches) {
         println!("Error: {}", error)
