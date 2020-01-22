@@ -216,13 +216,20 @@ impl CPU {
             }
             // DRW Vx, Vy, nibble
             (0xD, _, _, _) => {
+                self.v[0xf] = 0;
                 for idx in 0..n {
                     for bit in 0..8 {
                         let posx = (self.v[x] as usize + bit) % WIDTH;
                         let posy = (self.v[y] as usize + idx) % HEIGHT;
                         let cell = &mut self.vram[posy][posx];
 
-                        *cell ^= (self.ram[(self.i + idx) as usize] << bit >> 7) != 0;
+                        let color = (self.ram[(self.i + idx) as usize] << bit >> 7) != 0;
+
+                        if *cell && color {
+                            self.v[0xf] = 1;
+                        }
+
+                        *cell ^= color;
                     }
                 }
             }
