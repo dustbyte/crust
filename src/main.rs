@@ -62,6 +62,7 @@ fn run(matches: &ArgMatches) -> Result<(), String> {
     while let Ok(state) = keyboard.poll() {
         if io_counter.is_burnt() {
             cpu.decrement_delay();
+            cpu.decrement_sound();
             renderer.render(cpu.get_vram());
 
             if cpu.beeping() {

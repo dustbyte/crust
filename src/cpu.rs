@@ -72,6 +72,12 @@ impl CPU {
         self.st > 0
     }
 
+    pub fn decrement_sound(&mut self) {
+        if self.st > 0 {
+            self.st -= 1
+        }
+    }
+
     pub fn decrement_delay(&mut self) {
         if self.dt > 0 {
             self.dt -= 1
