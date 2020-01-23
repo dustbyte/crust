@@ -1,11 +1,8 @@
 extern crate clap;
-mod reader;
 
 use clap::{App, Arg, ArgMatches};
 
-use crust::rom::load_rom;
-
-use reader::RomReader;
+use crust::rom::{load_rom, Reader};
 
 fn run(matches: &ArgMatches) -> Result<(), String> {
     let rom_path = matches.value_of("ROM").unwrap();
@@ -13,7 +10,7 @@ fn run(matches: &ArgMatches) -> Result<(), String> {
         Ok(rom) => rom,
         Err(error) => return Err(error.to_string()),
     };
-    let _reader = RomReader::new(&rom);
+    let _reader = Reader::new(&rom);
     Ok(())
 }
 
