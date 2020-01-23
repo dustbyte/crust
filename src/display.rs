@@ -4,7 +4,8 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 
 use crate::context::Context;
-use crate::{HEIGHT, UPSCALE, WIDTH};
+use crate::UPSCALE;
+use crust::{HEIGHT, WIDTH};
 
 const FACTOR: i32 = UPSCALE as i32;
 

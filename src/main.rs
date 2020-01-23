@@ -7,7 +7,6 @@ mod display;
 mod font;
 mod keyboard;
 mod renderer;
-mod rom;
 mod tools;
 
 use std::{thread, time};
@@ -20,13 +19,10 @@ use cpu::CPU;
 use display::Display;
 use keyboard::*;
 use renderer::Renderer;
-use rom::*;
 use tools::*;
 
-const MEMORY_SIZE: usize = 0x1000;
-const ROM_SIZE: usize = MEMORY_SIZE - 0x200;
-const WIDTH: usize = 64;
-const HEIGHT: usize = 32;
+use crust::rom::load_rom;
+
 const UPSCALE: usize = 10;
 const CPU_FREQUENCY: &'static str = "500";
 const IO_FREQUENCY: &'static str = "60";

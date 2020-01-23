@@ -1,8 +1,8 @@
-use crate::ROM_SIZE;
-
 use std::fs::File;
 use std::io;
 use std::io::prelude::*;
+
+use crate::ROM_SIZE;
 
 pub type RomBuffer = [u8; ROM_SIZE];
 

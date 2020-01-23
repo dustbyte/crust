@@ -5,6 +5,15 @@ version = "0.1.0"
 authors = ["Pierre Wacrenier <pierre@wacrenier.me>"]
 edition = "2018"
 
+[[bin]]
+name = 'crust'
+path = 'src/main.rs'
+
+[[bin]]
+name = 'disassembler'
+description = "A Chip-8 disassembler in Rust"
+path = 'src/disassembler/main.rs'
+
 [dependencies]
 sdl2 = "~0.32"
 clap = "~2.27.0"

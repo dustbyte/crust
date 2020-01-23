@@ -2,10 +2,11 @@ use rand;
 
 use crate::font::FONT;
 use crate::keyboard::State;
-use crate::rom::RomBuffer;
-use crate::HEIGHT;
-use crate::MEMORY_SIZE;
-use crate::WIDTH;
+use crust::rom::RomBuffer;
+
+use crust::HEIGHT;
+use crust::MEMORY_SIZE;
+use crust::WIDTH;
 
 const INSTRUCTION_LENGTH: u16 = 2;
 const GENERAL_PURPOSE_REGISTERS: usize = 0x10;
@@ -335,7 +336,7 @@ impl CPU {
 #[cfg(test)]
 mod cpu_test {
     use super::*;
-    use crate::ROM_SIZE;
+    use crust::ROM_SIZE;
 
     #[test]
     fn test_new_cpu() {
