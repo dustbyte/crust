@@ -30,7 +30,7 @@ impl<'a> Iterator for Reader<'a> {
     type Item = u8;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.cur <= ROM_SIZE {
+        if self.cur < ROM_SIZE {
             let value = self.rom[self.cur];
             self.cur += 1;
             Some(value)

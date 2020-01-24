@@ -1,3 +1,4 @@
+pub mod decoder;
 pub mod rom;
 
 pub const MEMORY_SIZE: usize = 0x1000;

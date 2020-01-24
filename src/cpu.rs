@@ -2,7 +2,7 @@ use rand;
 
 use crate::font::FONT;
 use crate::keyboard::State;
-use crust::rom::RomBuffer;
+use crust::rom::{Reader, RomBuffer};
 
 use crust::HEIGHT;
 use crust::MEMORY_SIZE;
@@ -60,7 +60,8 @@ impl CPU {
     }
 
     fn load_rom(&mut self, rom: &RomBuffer) {
-        for (i, &elem) in rom.iter().enumerate() {
+        let reader = Reader::new(rom);
+        for (i, elem) in reader.enumerate() {
             self.ram[self.pc as usize + i] = elem
         }
     }
