@@ -2,6 +2,8 @@
 
 Chip-8 suite in Rust
 
+![Crust screenshot](misc/crust_emulator.png "Crust Chip-8 Suite")
+
 ## Requirements
 
 * SDL2 must be installed on your system
@@ -9,7 +11,7 @@ Chip-8 suite in Rust
 ## Components
 
 * emulator (bin: crust)
-* disassembler (bin: disassembler, WIP) 
+* disassembler (bin: disassembler, WIP)
 * assembler (bin: assembler, WIP)
 
 ## Emulator
@@ -22,9 +24,8 @@ $ cargo build --bin crust
 
 ### Usage
 
-If not installed, replace `crust` by `cargo run --bin crust --`
-
 ```
+$ cargo run --bin crust -- -h
 crust 0.1.0
 Pierre Wacrenier <pierre@wacrenier.me>
 A Chip-8 emulator in Rust
