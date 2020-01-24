@@ -1,5 +1,5 @@
 #[allow(dead_code)]
-pub struct Context {
+pub struct Args {
     x: usize,
     y: usize,
     n: usize,
@@ -8,7 +8,7 @@ pub struct Context {
     nibbles: (u8, u8, u8, u8),
 }
 
-impl Context {
+impl Args {
     pub fn new(instruction: u16) -> Self {
         let nibbles: (u8, u8, u8, u8) = (
             ((instruction & 0xF000) >> 12) as u8,
@@ -68,12 +68,12 @@ pub enum Opcode {
     UNKNOWN,
 }
 
-pub fn decode_instruction(instruction: u16) -> (Opcode, Context) {
-    let ctx = Context::new(instruction);
+pub fn decode_instruction(instruction: u16) -> (Opcode, Args) {
+    let args = Args::new(instruction);
 
     use Opcode::*;
 
-    let opcode = match ctx.nibbles {
+    let opcode = match args.nibbles {
         (0x0, 0x0, 0xE, 0x0) => CLS,
         (0x0, 0x0, 0xE, 0xE) => RET,
         (0x1, _, _, _) => JP_ADDR,
@@ -111,7 +111,7 @@ pub fn decode_instruction(instruction: u16) -> (Opcode, Context) {
         (_, _, _, _) => UNKNOWN,
     };
 
-    (opcode, ctx)
+    (opcode, args)
 }
 
 #[cfg(test)]
@@ -120,14 +120,14 @@ mod decoder_test {
 
     #[test]
     fn test_new_context() {
-        let ctx = Context::new(0x1234);
+        let args = Args::new(0x1234);
 
-        assert_eq!(ctx.nibbles, (0x1, 0x2, 0x3, 0x4));
-        assert_eq!(ctx.x, 0x2);
-        assert_eq!(ctx.y, 0x3);
-        assert_eq!(ctx.n, 0x4);
-        assert_eq!(ctx.kk, 0x34);
-        assert_eq!(ctx.nnn, 0x234);
+        assert_eq!(args.nibbles, (0x1, 0x2, 0x3, 0x4));
+        assert_eq!(args.x, 0x2);
+        assert_eq!(args.y, 0x3);
+        assert_eq!(args.n, 0x4);
+        assert_eq!(args.kk, 0x34);
+        assert_eq!(args.nnn, 0x234);
     }
 
     #[test]
