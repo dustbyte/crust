@@ -433,4 +433,79 @@ mod cpu_test {
         let instruction = cpu.fetch_instruction();
         assert_eq!(instruction, 0x0304);
     }
+
+    fn setup_instruction(instruction: u16) -> (CPU, State) {
+        let mut rom: RomBuffer = [0; ROM_SIZE];
+        let state = State::new();
+        rom[0] = (instruction >> 8) as u8;
+        rom[1] = (instruction << 8 >> 8) as u8;
+        let cpu = CPU::init(&rom);
+
+        return (cpu, state);
+    }
+
+    #[test]
+    fn test_clear_screen() {
+        let (mut cpu, state) = setup_instruction(0x00E0);
+        cpu.tick(&state);
+        assert_eq!(cpu.vram[0][0], false)
+    }
+
+    #[test]
+    fn test_ret() {
+        let (mut cpu, state) = setup_instruction(0x00EE);
+        cpu.sp = 1;
+        cpu.stack[0] = 0x42;
+        cpu.tick(&state);
+        assert_eq!(cpu.sp, 0);
+        assert_eq!(cpu.pc, 0x42);
+    }
+
+    #[test]
+    fn test_jp_addr() {
+        let (mut cpu, state) = setup_instruction(0x1234);
+        cpu.tick(&state);
+        assert_eq!(cpu.pc, 0x234);
+    }
+
+    #[test]
+    fn test_call_addr() {
+        let (mut cpu, state) = setup_instruction(0x2234);
+        cpu.tick(&state);
+        assert_eq!(cpu.stack[0], 0x202);
+        assert_eq!(cpu.sp, 1);
+        assert_eq!(cpu.pc, 0x234);
+    }
+
+    #[test]
+    fn test_se_reg_const() {
+        let (mut cpu, state) = setup_instruction(0x3012);
+        cpu.v[0] = 0x12;
+        cpu.tick(&state);
+        assert_eq!(cpu.pc, 0x204)
+    }
+
+    #[test]
+    fn test_se_reg_const_no_match() {
+        let (mut cpu, state) = setup_instruction(0x3012);
+        cpu.v[0] = 0x00;
+        cpu.tick(&state);
+        assert_eq!(cpu.pc, 0x202)
+    }
+
+    #[test]
+    fn test_sne_reg_const() {
+        let (mut cpu, state) = setup_instruction(0x4012);
+        cpu.v[0] = 0x00;
+        cpu.tick(&state);
+        assert_eq!(cpu.pc, 0x204)
+    }
+
+    #[test]
+    fn test_sne_reg_const_match() {
+        let (mut cpu, state) = setup_instruction(0x4012);
+        cpu.v[0] = 0x12;
+        cpu.tick(&state);
+        assert_eq!(cpu.pc, 0x202)
+    }
 }
