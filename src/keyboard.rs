@@ -11,22 +11,22 @@ pub struct Keyboard {
 
 #[repr(u16)]
 pub enum KeyPad {
-    Key0 = (1 << 0x00),
-    Key1 = (1 << 0x01),
-    Key2 = (1 << 0x02),
-    Key3 = (1 << 0x03),
-    Key4 = (1 << 0x04),
-    Key5 = (1 << 0x05),
-    Key6 = (1 << 0x06),
-    Key7 = (1 << 0x07),
-    Key8 = (1 << 0x08),
-    Key9 = (1 << 0x09),
-    KeyA = (1 << 0x0A),
-    KeyB = (1 << 0x0B),
-    KeyC = (1 << 0x0C),
-    KeyD = (1 << 0x0D),
-    KeyE = (1 << 0x0E),
-    KeyF = (1 << 0x0F),
+    Key0 = 1 << 0x00,
+    Key1 = 1 << 0x01,
+    Key2 = 1 << 0x02,
+    Key3 = 1 << 0x03,
+    Key4 = 1 << 0x04,
+    Key5 = 1 << 0x05,
+    Key6 = 1 << 0x06,
+    Key7 = 1 << 0x07,
+    Key8 = 1 << 0x08,
+    Key9 = 1 << 0x09,
+    KeyA = 1 << 0x0A,
+    KeyB = 1 << 0x0B,
+    KeyC = 1 << 0x0C,
+    KeyD = 1 << 0x0D,
+    KeyE = 1 << 0x0E,
+    KeyF = 1 << 0x0F,
 }
 
 pub struct State {
